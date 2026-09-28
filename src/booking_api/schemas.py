@@ -46,3 +46,20 @@ class ResourceOut(BaseModel):
     slot_minutes: int
     is_active: bool
     created_at: datetime
+
+class BookingCreate(BaseModel):
+    resource_id: int
+    start_time: datetime
+
+
+class BookingOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    resource_id: int
+    user_id: int
+    start_time: datetime
+    cancelled_at: datetime | None
+    created_at: datetime
+
+
