@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}My bookings{% endblock %}
+{% block content %}
+<h1>My bookings</h1>
+{% for booking in bookings %}
+<div class="card slot">
+  <span>
+    <strong>{{ booking.resource.name }}</strong><br>
+    {{ booking.start_time.strftime("%a %d %b, %H:%M") }} UTC
+  </span>
+  <form method="post" action="/ui/bookings/{{ booking.id }}/cancel">
+    <button type="submit">Cancel</button>
+  </form>
+</div>
+{% else %}
+<div class="card"><p>No upcoming bookings. <a href="/ui/resources">Book something</a>.</p></div>
+{% endfor %}
+{% endblock %}
+
+

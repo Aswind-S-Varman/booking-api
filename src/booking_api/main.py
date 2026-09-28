@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from .routers import auth, resources, bookings
+from fastapi.responses import RedirectResponse
 
-from .routers import auth
+from . import web
+from .routers import auth, bookings, resources
 
 app = FastAPI(
     title="Booking API",
@@ -12,6 +13,12 @@ app = FastAPI(
 app.include_router(auth.router)
 app.include_router(resources.router)
 app.include_router(bookings.router)
+app.include_router(web.router)
+
+
+@app.get("/", include_in_schema=False)
+def index():
+    return RedirectResponse("/ui/resources")
 
 
 @app.get("/health", tags=["system"])

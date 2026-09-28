@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Resources{% endblock %}
+{% block content %}
+<h1>Resources</h1>
+{% for resource in resources %}
+<div class="card">
+  <h2><a href="/ui/resources/{{ resource.id }}">{{ resource.name }}</a></h2>
+  <p>{{ resource.description or "No description" }}</p>
+  <p class="taken">{{ resource.slot_minutes }}-minute slots</p>
+</div>
+{% else %}
+<div class="card"><p>No resources yet. An admin can add them via the API.</p></div>
+{% endfor %}
+{% endblock %}
+
+
+{% extends "base.html" %}
+{% block title %}{{ resource.name }}{% endblock %}
+{% block content %}
+<h1>{{ resource.name }}</h1>
+<p>{{ resource.description }}</p>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+<div class="card">
+  <h2>Available slots</h2>
+  {% for slot, is_taken in slots %}
+  <div class="slot">
+    <span>{{ slot.strftime("%a %d %b, %H:%M") }} UTC</span>
+    {% if is_taken %}
+      <span class="taken">Booked</span>
+    {% else %}
+      <form method="post" action="/ui/resources/{{ resource.id }}/book">
+        <input type="hidden" name="start_time" value="{{ slot.isoformat() }}">
+        <button type="submit">Book</button>
+      </form>
+    {% endif %}
+  </div>
+  {% else %}
+  <p>No upcoming slots.</p>
+  {% endfor %}
+</div>
+<p><a href="/ui/resources">Back to resources</a></p>
+{% endblock %}
+
+
